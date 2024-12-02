@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Page</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #6a11cb, #2575fc);
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            margin: 20px 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 5px #000;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .question {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+
+        .options li {
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            background-color: #f50057;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff4081;
+            transform: scale(1.1);
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        .explanation {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #ffe57f;
+            text-shadow: 1px 1px 3px #000;
+        }
+
+        #nextButton {
+            margin-top: 20px;
+            background-color: #2196f3;
+        }
+
+        #nextButton:hover {
+            background-color: #64b5f6;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            body {
+                font-size: 14px;
+            }
+
+            .container {
+                width: 90%;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .question {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz Game</h1>
+        <div class="question" id="question">Loading...</div>
+        <ul class="options" id="options"></ul>
+        <div class="explanation" id="explanation"></div>
+        <button onclick="nextQuestion()" id="nextButton" style="display:none;">Next Question</button>
+    </div>
+
+    <script>
+        // Array of questions
+        const questions = [
+            {
+                text: "What is 2 + 2?",
+                options: [1, 2, 4, 5],
+                correct: 4,
+                explanation: "The correct answer is 4 because 2 + 2 equals 4."
+            },
+            {
+                text: "What is the capital of France?",
+                options: ["Berlin", "Madrid", "Paris", "Rome"],
+                correct: "Paris",
+                explanation: "The correct answer is Paris because it is the capital of France."
+            },
+            {
+                text: "Which programming language is used for web development?",
+                options: ["Python", "C++", "HTML", "Java"],
+                correct: "HTML",
+                explanation: "The correct answer is HTML because it is the standard language for creating webpages."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        function loadQuestion() {
+            const question = questions[currentQuestionIndex];
+            document.getElementById("question").textContent = question.text;
+
+            // Load options
+            const optionsList = document.getElementById("options");
+            optionsList.innerHTML = ""; // Clear previous options
+            question.options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () => checkAnswer(option);
+                const li = document.createElement("li");
+                li.appendChild(button);
+                optionsList.appendChild(li);
+            });
+
+            // Reset explanation and next button
+            document.getElementById("explanation").textContent = "";
+            document.getElementById("nextButton").style.display = "none";
+        }
+
+        function checkAnswer(selected) {
+            const question = questions[currentQuestionIndex];
+            const explanation = document.getElementById("explanation");
+            if (selected === question.correct) {
+                explanation.style.color = "#00e676";
+                explanation.textContent = "Correct! " + question.explanation;
+            } else {
+                explanation.style.color = "#ff1744";
+                explanation.textContent = "Wrong! " + question.explanation;
+            }
+            document.getElementById("nextButton").style.display = "block";
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                document.getElementById("question").textContent = "Quiz Completed!";
+                document.getElementById("options").innerHTML = "";
+                document.getElementById("explanation").textContent = "Great job!";
+                document.getElementById("nextButton").style.display = "none";
+            }
+        }
+
+        // Load the first question
+        loadQuestion();
+    </script>
+</body>
+</html>
